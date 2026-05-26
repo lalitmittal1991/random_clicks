@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Balloon Pop Learning Game</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="status" aria-live="polite">
+          <span id="scoreText">Score: 0</span>
+          <span id="roundText">Round: 1</span>
+          <span id="starsText">Stars: 0</span>
+        </div>
+        <button id="settingsBtn" class="icon-btn" aria-label="Open settings">⚙</button>
+      </header>
+
+      <main>
+        <section class="controls">
+          <button id="startBtn">Start Game</button>
+          <button id="pauseBtn" disabled>Pause</button>
+          <button id="resetBtn">Reset</button>
+          <span id="modeTag">Mode: A-Z</span>
+        </section>
+
+        <section id="gameArea" class="game-area" tabindex="0" aria-label="Game area"></section>
+
+        <section class="footer-bar">
+          <div id="messageText">Press Start to begin.</div>
+          <div id="timerText">Time: 0s</div>
+        </section>
+      </main>
+    </div>
+
+    <aside id="settingsPanel" class="settings-panel hidden" aria-hidden="true">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button id="closeSettingsBtn" class="icon-btn" aria-label="Close settings">✕</button>
+      </div>
+
+      <div id="lockSection" class="lock-section hidden">
+        <label for="pinInput">Enter PIN</label>
+        <input id="pinInput" type="password" maxlength="6" inputmode="numeric" />
+        <button id="unlockBtn">Unlock</button>
+        <p id="pinError" class="error-text"></p>
+      </div>
+
+      <form id="settingsForm" class="settings-form">
+        <div class="row">
+          <label for="modeSelect">Mode</label>
+          <select id="modeSelect">
+            <option value="letters">A-Z</option>
+            <option value="numbers">1-10</option>
+            <option value="mixed">Mixed</option>
+            <option value="confusion">Confusion Set</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="fallRate">Fall speed</label>
+          <input id="fallRate" type="range" min="40" max="260" step="10" />
+          <span id="fallRateValue"></span>
+        </div>
+
+        <div class="row">
+          <label for="spawnInterval">Spawn interval (ms)</label>
+          <input id="spawnInterval" type="range" min="300" max="2200" step="100" />
+          <span id="spawnIntervalValue"></span>
+        </div>
+
+        <div class="row">
+          <label for="balloonsPerRound">Balloons per round</label>
+          <input id="balloonsPerRound" type="number" min="5" max="200" step="1" />
+        </div>
+
+        <div class="row">
+          <label for="maxSimultaneous">Max simultaneous</label>
+          <input id="maxSimultaneous" type="number" min="1" max="30" step="1" />
+        </div>
+
+        <div class="row">
+          <label for="roundType">Round type</label>
+          <select id="roundType">
+            <option value="count">Count based</option>
+            <option value="time">Time based</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="roundSeconds">Round seconds</label>
+          <input id="roundSeconds" type="number" min="10" max="300" step="5" />
+        </div>
+
+        <div class="row">
+          <label for="wrongBehavior">Wrong key behavior</label>
+          <select id="wrongBehavior">
+            <option value="retry">Keep trying until bottom</option>
+            <option value="drop">Pop on first wrong key</option>
+          </select>
+        </div>
+
+        <div class="row checkbox-row">
+          <label><input id="enableClick" type="checkbox" /> Enable tap/click pop</label>
+          <label><input id="enableVoice" type="checkbox" /> Voice pronunciation</label>
+          <label><input id="enablePopSound" type="checkbox" /> Pop sound</label>
+        </div>
+
+        <div class="row">
+          <label for="voiceRate">Voice rate</label>
+          <input id="voiceRate" type="range" min="0.6" max="1.5" step="0.1" />
+          <span id="voiceRateValue"></span>
+        </div>
+
+        <div class="row">
+          <label for="voicePitch">Voice pitch</label>
+          <input id="voicePitch" type="range" min="0.6" max="1.8" step="0.1" />
+          <span id="voicePitchValue"></span>
+        </div>
+
+        <div class="row">
+          <label for="voiceVolume">Voice volume</label>
+          <input id="voiceVolume" type="range" min="0.1" max="1" step="0.1" />
+          <span id="voiceVolumeValue"></span>
+        </div>
+
+        <div class="row">
+          <label for="themeSelect">Theme</label>
+          <select id="themeSelect">
+            <option value="classic">Classic</option>
+            <option value="colorSafe">Color-safe</option>
+          </select>
+        </div>
+
+        <div class="row checkbox-row">
+          <label><input id="reducedMotion" type="checkbox" /> Reduced motion</label>
+        </div>
+
+        <div class="row">
+          <label for="difficultySelect">Difficulty preset</label>
+          <select id="difficultySelect">
+            <option value="custom">Custom</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+
+        <div class="row pin-row">
+          <label for="parentPin">Parent PIN</label>
+          <input id="parentPin" type="password" maxlength="6" inputmode="numeric" />
+          <button type="button" id="savePinBtn">Save PIN</button>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="saveSettingsBtn">Save Settings</button>
+          <button type="button" id="testVoiceBtn">Test Voice</button>
+        </div>
+      </form>
+
+      <section class="stats-panel">
+        <h3>Parent Insights</h3>
+        <p id="accuracyText">Accuracy: 0%</p>
+        <p id="playTimeText">Play Time: 0s</p>
+        <p id="mostMissedText">Most Missed: None</p>
+      </section>
+    </aside>
+
+    <script src="app.js"></script>
+  </body>
+</html>
