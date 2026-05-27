@@ -1,0 +1,12 @@
+#!/bin/sh
+
+printf "Running automated tests before commit...\n"
+npm run test:report
+status=$?
+
+if [ $status -ne 0 ]; then
+  printf "\nTests failed. Commit blocked.\n"
+  exit $status
+fi
+
+printf "\nTests passed. Report: test-results/junit.xml\n"

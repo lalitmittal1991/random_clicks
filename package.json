@@ -1,0 +1,21 @@
+{
+  "name": "random_clicks",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:report": "vitest run --reporter=default --reporter=junit --outputFile.junit=./test-results/junit.xml",
+    "test:changed": "vitest related --run",
+    "prepare": "git config core.hooksPath .githooks",
+    "test:auto": "vitest --reporter=default --reporter=junit --outputFile.junit=./test-results/junit.xml"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "vitest": "^3.2.4"
+  }
+}
