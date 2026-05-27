@@ -349,6 +349,9 @@
   function missBalloon(balloon, fromWrongKey) {
     state.stats.totalMissed += 1;
     state.stats.missedBySymbol[balloon.value] = (state.stats.missedBySymbol[balloon.value] || 0) + 1;
+    if (state.settings.enablePopSound) {
+      playMissSound();
+    }
     removeBalloon(balloon, false);
 
     if (fromWrongKey) {
@@ -373,7 +376,8 @@
       balloon.element.classList.add("pop");
       setTimeout(() => balloon.element && balloon.element.remove(), 140);
     } else {
-      balloon.element.remove();
+      balloon.element.classList.add("miss");
+      setTimeout(() => balloon.element && balloon.element.remove(), 180);
     }
   }
 
@@ -613,6 +617,24 @@
 
     osc.start();
     osc.stop(ctx.currentTime + 0.1);
+  }
+
+  function playMissSound() {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(260, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.12);
+
+    gain.gain.setValueAtTime(0.35, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.13);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.14);
   }
 
   function applyTheme() {

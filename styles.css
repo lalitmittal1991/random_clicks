@@ -125,6 +125,10 @@ button[disabled] {
   animation: pop 140ms ease-out forwards;
 }
 
+.balloon.miss {
+  animation: missBurst 180ms ease-out forwards;
+}
+
 .balloon.wrong {
   animation: shake 180ms ease-in-out;
 }
@@ -133,6 +137,22 @@ button[disabled] {
   to {
     transform: scale(1.25);
     opacity: 0;
+  }
+}
+
+@keyframes missBurst {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  45% {
+    transform: scale(1.2);
+    filter: brightness(1.35);
+  }
+  100% {
+    transform: scale(0.2);
+    opacity: 0;
+    filter: brightness(0.85);
   }
 }
 
